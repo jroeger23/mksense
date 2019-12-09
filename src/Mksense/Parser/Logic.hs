@@ -3,6 +3,7 @@ module Mksense.Parser.Logic where
 import Mksense.Parser.Core
 import Mksense.Logic.Data
 import Data.Char
+import Data.Maybe
 import Control.Applicative
 
 oneOf :: [Parser a] -> Parser a
@@ -33,7 +34,7 @@ parens m = do
   p <- oneOf $ map (reserved . fst) ps
   n <- m
   spaces
-  reserved $ head [close | (p', close) <- ps, p == p']
+  reserved $ fromJust $ lookup p ps
   return $ n {unary=u}
   where ps = [("(",")"), ("[","]"), ("{","}"), ("<",">")]
 
