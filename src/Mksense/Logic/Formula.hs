@@ -25,7 +25,7 @@ neg (Composed Nothing a o b)       = (Composed (Just Negate) a o b)
 nnf :: Expression -> Expression
 nnf (Composed (Just Negate) a And b)          = Composed Nothing (nnf . neg $ a) Or (nnf . neg $ b)
 nnf (Composed (Just Negate) a Or b)           = Composed Nothing (nnf . neg $ a) And (nnf . neg $ b)
-nnf (Composed (Just Negate) a Implies b)      = Composed Nothing (nnf . neg $ b) Implies (nnf . neg $ a)
+nnf (Composed (Just Negate) a Implies b)      = Composed Nothing (nnf a) And (nnf . neg $ b)
 nnf (Composed (Just Negate) a Equivalent b)   = Composed Nothing (nnf a) Xor (nnf b)
 nnf (Composed (Just Negate) a Nand b)         = Composed Nothing (nnf a) And (nnf b)
 nnf (Composed (Just Negate) a Xor b)          = Composed Nothing (nnf a) Equivalent (nnf b)
