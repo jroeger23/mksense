@@ -1,6 +1,8 @@
 module Mksense.Logic.Formula where
 
 import Mksense.Logic.Data
+import Data.List
+import Data.Type.Equality
 
 
 -- Logic types
@@ -8,6 +10,9 @@ type Clause = [Expression]
 type KClause = [Expression]
 type DClause = [Expression]
 
+ -- Check if two clauses are equivalent
+(<=>) :: Clause -> Clause -> Bool
+(<=>) a b = all (\x -> x `elem` a) b && all (\x -> x `elem` b) a
 
 -- negate an expression
 neg :: Expression -> Expression
@@ -21,9 +26,9 @@ nnf :: Expression -> Expression
 nnf (Composed (Just Negate) a And b)          = Composed Nothing (nnf . neg $ a) Or (nnf . neg $ b)
 nnf (Composed (Just Negate) a Or b)           = Composed Nothing (nnf . neg $ a) And (nnf . neg $ b)
 nnf (Composed (Just Negate) a Implies b)      = Composed Nothing (nnf . neg $ b) Implies (nnf . neg $ a)
-nnf (Composed (Just Negate) a Equivalent b)   = Composed Nothing (nnf . neg $ a) Xor (nnf . neg $ b)
+nnf (Composed (Just Negate) a Equivalent b)   = Composed Nothing (nnf a) Xor (nnf b)
 nnf (Composed (Just Negate) a Nand b)         = Composed Nothing (nnf a) And (nnf b)
-nnf (Composed (Just Negate) a Xor b)          = Composed Nothing (nnf . neg $ a) Equivalent (nnf . neg $ b)
+nnf (Composed (Just Negate) a Xor b)          = Composed Nothing (nnf a) Equivalent (nnf b)
 nnf (Composed Nothing       a o b)            = Composed Nothing (nnf a) o (nnf b)
 nnf (Literal u (Left a)) | u == (Just Negate) = (Literal Nothing (Left (not a)))
 nnf a                                         = a
