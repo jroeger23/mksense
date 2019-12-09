@@ -35,7 +35,7 @@ parens m = do
   spaces
   reserved $ head [close | (p', close) <- ps, p == p']
   return $ n {unary=u}
-  where ps = [("(",")"), ("[","]")]
+  where ps = [("(",")"), ("[","]"), ("{","}"), ("<",">")]
 
 unar :: Parser (Maybe Unary)
 unar = do
