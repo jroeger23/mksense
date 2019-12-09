@@ -42,6 +42,7 @@ quoteStr = do
 parens :: Parser Expression -> Parser Expression
 parens m = do
   u <- unar
+  spaces
   p <- oneOf $ map (reserved . fst) ps
   n <- m
   spaces
