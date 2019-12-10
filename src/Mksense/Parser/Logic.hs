@@ -1,43 +1,11 @@
 module Mksense.Parser.Logic where
 
 import Mksense.Parser.Core
+import Mksense.Parser.Common
 import Mksense.Logic.Data
 import Data.Char
 import Data.Maybe
 import Control.Applicative
-
-oneOf :: [Parser a] -> Parser a
-oneOf s = foldr (<|>) empty s
-
-char :: Char -> Parser Char
-char c = satisfy (c ==)
-
-nchar :: Char -> Parser Char
-nchar c = satisfy (c /=)
-
-string :: String -> Parser String
-string [] = return []
-string (c:cs) = do { char c; string cs; return (c:cs)}
-
-token :: Parser a -> Parser a
-token p = do { a <- p; spaces ; return a}
-
-reserved :: String -> Parser String
-reserved s = token (string s)
-
-spaces :: Parser String
-spaces = many . satisfy $ flip elem " \n\r"
-
-alphanum :: Parser Char
-alphanum = satisfy isAlphaNum
-
-quoteStr :: Parser String
-quoteStr = do
-  q <- oneOf $ map char qs
-  s <- many $ nchar q
-  char q
-  return s
-  where qs = ['\"', '\'']
 
 parens :: Parser Expression -> Parser Expression
 parens m = do
