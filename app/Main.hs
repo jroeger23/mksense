@@ -11,5 +11,5 @@ import System.Environment
 main :: IO ()
 main = do
   a <- getLine
-  handle (opts a) (P.run . rest . opts $ a)
-  where opts = C.run
+  let opts = C.run a in
+    handle opts (P.run . rest $ opts)
