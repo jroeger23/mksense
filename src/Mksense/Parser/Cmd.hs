@@ -5,13 +5,12 @@ import Mksense.Parser.Core
 import Mksense.Parser.Common
 import Mksense.Logic.Data
 import Control.Applicative
+import Control.Monad
 
 
 flag :: String -> Parser String
 flag s = do
-  string "--"
-  string s
-  spaces
+  token $ mplus (string "--") (string s)
   return s
 
 flags :: Options -> Parser Options
