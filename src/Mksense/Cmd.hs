@@ -1,5 +1,6 @@
-module Mksense.Cmd where
+module Mksense.Cmd  where
 
+import Mksense.Cmd as T
 import Mksense.Logic.Data
 import Mksense.Logic.Formula as F
 
@@ -16,26 +17,26 @@ data Options = Options
   }
 
 instance Show Options where
-  show o = (if Mksense.Cmd.nnf o then "nnf"
-    else if   Mksense.Cmd.dnf o then "dnf"
-    else if   Mksense.Cmd.knf o then "knf"
-    else if   Mksense.Cmd.orand o then "orand"
+  show o = (if T.nnf o then "nnf"
+    else if T.dnf o    then "dnf"
+    else if T.knf o    then "knf"
+    else if T.orand o  then "orand"
     else "show")
-    ++ if Mksense.Cmd.clauses o then " clauses" else ""
+    ++ if T.clauses o then " clauses" else ""
 
 
 defaultOptions :: Options
 defaultOptions = Options False False False False False Brief ""
 
 handle :: Options -> Expression -> IO ()
-handle o = do if Mksense.Cmd.nnf o        then print . F.nnf
-              else if Mksense.Cmd.orand o then print . F.orand
-              else if Mksense.Cmd.dnf o
-                      then if Mksense.Cmd.clauses o
+handle o = do if T.nnf o        then print . F.nnf
+              else if T.orand o then print . F.orand
+              else if T.dnf o
+                      then if T.clauses o
                               then print . F.minifyDnfClauses . F.dnfClauses . F.dnf . F.nnf . F.orand
                               else print . F.dnf . F.nnf . F.orand
-              else if Mksense.Cmd.knf o
-                      then if Mksense.Cmd.clauses o
+              else if T.knf o
+                      then if T.clauses o
                               then print . F.minifyKnfClauses . F.knfClauses . F.knf . F.nnf . F.orand
                               else print . F.knf . F.nnf . F.orand
               else print
