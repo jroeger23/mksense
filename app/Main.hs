@@ -10,7 +10,7 @@ import System.IO
 
 interactive :: Options -> IO ()
 interactive opts = forever $ do
-  putStr $ show opts ++ "> "
+  putStr $ "\n" ++ show opts ++ "> "
   hFlush stdout
   a <- getLine
   handle opts (L.run a)
