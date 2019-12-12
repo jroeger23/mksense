@@ -67,4 +67,4 @@ satisfy p = item `bind` \c ->
   else (Parser (\cs -> []))
 
 oneOf :: [Parser a] -> Parser a
-oneOf s = foldr (<|>) empty s
+oneOf s = foldl (<|>) empty s
