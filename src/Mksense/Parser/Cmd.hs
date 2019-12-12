@@ -10,7 +10,8 @@ import Control.Monad
 
 flag :: String -> Parser String
 flag s = do
-  token $ mplus (string "--") (string s)
+  mplus (string "--") (string s)
+  spaces
   return s
 
 flags :: Options -> Parser Options
