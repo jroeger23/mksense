@@ -13,7 +13,16 @@ data Options = Options
     clauses :: Bool,
     scheme :: OutputScheme,
     rest :: String
-  } deriving (Show)
+  }
+
+instance Show Options where
+  show o = (if Mksense.Cmd.nnf o then "nnf"
+    else if   Mksense.Cmd.dnf o then "dnf"
+    else if   Mksense.Cmd.knf o then "knf"
+    else if   Mksense.Cmd.orand o then "orand"
+    else "show")
+    ++ if Mksense.Cmd.clauses o then " clauses" else ""
+
 
 defaultOptions :: Options
 defaultOptions = Options False False False False False Brief ""
