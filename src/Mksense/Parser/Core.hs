@@ -1,3 +1,5 @@
+-- | Core from http://dev.stephendiehl.com/fun/002_parsers.html
+
 {-# OPTIONS_GHC -fno-warn-unused-do-bind #-}
 
 module Mksense.Parser.Core where
