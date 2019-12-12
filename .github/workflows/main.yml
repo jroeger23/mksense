@@ -12,7 +12,7 @@ jobs:
     - name: Build with Stack
       run: stack build
     - name: Copy Executable
-      run: cp $(stack build --dist-dir)/build/mksense-exe/mksense-exe ./mksense
+      run: cp $(stack path --dist-dir)/build/mksense-exe/mksense-exe ./mksense
 
     - uses: actions/upload-artifact@v1
       with:
