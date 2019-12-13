@@ -8,11 +8,21 @@ import System.Environment
 import System.IO
 
 
+getUntilLFLF :: Char -> IO String
+getUntilLFLF prev = do
+  a <- getChar
+  if a == '\n' && prev == a then do
+    return ""
+  else do
+    b <- getUntilLFLF a
+    return $ a:b
+
+
 interactive :: Options -> IO ()
 interactive opts = forever $ do
   putStr $ "\n" ++ show opts ++ "> "
   hFlush stdout
-  a <- getLine
+  a <- getUntilLFLF undefined
   putStrLn "" >> handle opts (L.run a)
 
 main :: IO ()
