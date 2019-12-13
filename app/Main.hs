@@ -22,7 +22,7 @@ interactive :: Options -> IO ()
 interactive opts = forever $ do
   putStr $ "\n" ++ show opts ++ "> "
   hFlush stdout
-  a <- getUntilLFLF undefined
+  a <- getUntilLFLF ' '
   putStrLn "" >> handle opts (L.run a)
 
 main :: IO ()
