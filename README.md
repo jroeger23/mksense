@@ -1,3 +1,3 @@
 # mksense
 
-It juts makes sense!
+It just makes sense!
