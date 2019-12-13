@@ -38,7 +38,7 @@ If no expression is given, start in interactive mode with specified settings.
 ## Syntax
 
 ``` ebnf
-<literal> ::= """<string>""" | <alphanum>
+<literal> ::= "\"" <string> "\"" | <alphanum>
 <unary> ::= "not" | "!" | "-" | ""
 <operator> ::= "or" | "||" | "and" | "&&" | "&" | "=>" | "->" | "implies" | "impl" | "<=>" | "=" | "<->" | "equiv" | "eq" | "equivalent" | "nand" | "!&" | "xor"
 <po> ::= "(" | "[" | "{" | "<"
