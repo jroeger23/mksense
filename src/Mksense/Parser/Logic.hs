@@ -64,7 +64,7 @@ impliesOp :: Parser Expression
 impliesOp = infixOp ["=>", "->", "implies", "impl"] Implies
 
 equivOp :: Parser Expression
-equivOp = infixOp ["<=>", "=", "==", "<->", "equiv", "eq", "equivalent"] Equivalent
+equivOp = infixOp ["<=>", "=", "<->", "equiv", "eq", "equivalent"] Equivalent
 
 nandOp :: Parser Expression
 nandOp = infixOp ["nand", "!&"] Nand
