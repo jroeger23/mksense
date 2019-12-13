@@ -43,7 +43,7 @@ If no expression is given, start in interactive mode with specified settings.
 <operator> ::= "or" | "||" | "and" | "&&" | "&" | "=>" | "->" | "implies" | "impl" | "<=>" | "=" | "<->" | "equiv" | "eq" | "equivalent" | "nand" | "!&" | "xor"
 <po> ::= "(" | "[" | "{" | "<"
 <pc> ::= ")" | "]" | "}" | ">"
-<atom> ::= <unary> <po <expr> <pc> | <literal>
+<atom> ::= <unary> <po> <expr> <pc> | <literal>
 <expr> ::= <unary> <atom> <operator> <atom>
 
 <syntax> := <expr>
@@ -66,7 +66,7 @@ Just show parsed expression of ```( a ∨ b ) ⇔ ¬( a ∧ b )```
 mksense '(a or b) = not (a and b)'
 ```
 
-Get negation NNF of ```¬( ¬[ a ∧ b ] ∨ ¬[ c ∨ ¬d ] )```
+Get NNF of ```¬( ¬[ a ∧ b ] ∨ ¬[ c ∨ ¬d ] )```
 
 ``` sh
 mksense nnf '!( !(a and b) or !(c or !d))'
@@ -101,7 +101,7 @@ Which statement is true?
 
 First of all we will model each statement:
 
-``` text
+``` haskell
 ( 1 <-> 2 )
 ( 2 <-> !5 )
 ( 3 <-> [1 and 2 and 3 and 4 and 5] )
@@ -113,7 +113,7 @@ So far, so good! But this by itself is not sufficient to model the whole
 problem.
 
 We need to model "One of them is true, the rest is false.":
-``` text
+``` haskell
 ( 1 -> not [2 or 3 or 4 or 5] )
 ( 2 -> not [1 or 3 or 4 or 5] )
 ( 3 -> not [2 or 1 or 4 or 5] )
@@ -124,7 +124,7 @@ We need to model "One of them is true, the rest is false.":
 
 Allright, to finalize our proposition we want every sub proposition to be true:
 
-``` text
+``` haskell
 ( 1 <-> 2 )                           and
 ( 2 <-> !5 )                          and
 ( 3 <-> [1 and 2 and 3 and 4 and 5] ) and 
@@ -155,6 +155,6 @@ Is satisfied when either:
  - Each of: [¬4,¬3,5,¬2,¬1] evaluates to True
 ```
 
-Okay this output hints us, that statement five is true.
+Okay this output hints us that statement five is true.
 
 Nice!
