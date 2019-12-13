@@ -45,12 +45,20 @@ infixOp s o = do
   b <- atom
   return $ Composed Nothing a o b
 
+infixChain :: [String] -> Operator -> Parser Expression
+infixChain s o = do
+  spaces
+  a <- atom
+  oneOf $ map reserved s
+  b <- infixChain s o <|> atom
+  return $ Composed Nothing a o b
+
 
 orOp :: Parser Expression
-orOp = infixOp ["or", "||"] Or
+orOp = infixChain ["or", "||"] Or
 
 andOp :: Parser Expression
-andOp = infixOp ["and", "&&", "&"] And
+andOp = infixChain ["and", "&&", "&"] And
 
 impliesOp :: Parser Expression
 impliesOp = infixOp ["=>", "->", "implies", "impl"] Implies
