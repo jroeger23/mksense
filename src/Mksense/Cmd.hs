@@ -50,33 +50,33 @@ human o e
       print e
       if dnf o then
         let clauses = F.minifyDnfClauses . F.dnfClauses . F.dnf . F.nnf . F.orand $ e in
-          if clauses == [] then putStrLn "Is never Satisfied!"
+          if clauses == [] then putStrLn "Is never satisfied!"
           else
-          foldl (>>) (putStrLn "Is Satisfield when either:")
+          foldl (>>) (putStrLn "Is satisfied when either:")
             $ map (\cs -> putStrLn $ " - Each of: "++show cs++" evaluates to True") clauses
       else if knf o then
         let clauses = F.minifyKnfClauses . F.knfClauses . F.knf . F.nnf . F.orand $ e in
-          foldl (>>) (putStrLn "Is Satisfield when all of:")
+          foldl (>>) (putStrLn "Is satisfied when all of:")
             $ map (\cs -> putStrLn $ " - One of: "++show cs++" evaluates to True") clauses
       else error "Cannot show clauses in show mode"
   | dnf o = do
-      putStr "Expression              : "
+      putStr "Expression:                  "
       print e
-      putStr "Has Disjunct Normal Form: "
+      putStr "Has disjunctive normal form: "
       print . F.dnf . F.nnf . F.orand $ e
   | knf o = do
-      putStr "Expression              : "
+      putStr "Expression:                  "
       print e
-      putStr "Has Conjunct Normal Form: "
+      putStr "Has conjunctive normal form: "
       print . F.knf . F.nnf . F.orand $ e
   | orand o = do
-      putStr "Expression                 : "
+      putStr "Expression:                    "
       print e
-      putStr "Displayed only with or, and: "
+      putStr "Displayed only with [or; and]: "
       print . F.orand $ e
   | nnf o = do
-      putStr "Expression              : "
+      putStr "Expression:               "
       print e
-      putStr "Has Negation Normal Form: "
+      putStr "Has negation normal form: "
       print . F.nnf $ e
   | otherwise = do print e

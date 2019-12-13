@@ -13,7 +13,7 @@ interactive opts = forever $ do
   putStr $ "\n" ++ show opts ++ "> "
   hFlush stdout
   a <- getLine
-  handle opts (L.run a)
+  putStrLn "" >> handle opts (L.run a)
 
 main :: IO ()
 main = do
