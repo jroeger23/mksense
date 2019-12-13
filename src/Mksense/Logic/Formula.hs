@@ -43,10 +43,10 @@ orand (Composed u a o b)          = Composed u (orand a) o (orand b)
 orand (Literal u a)               = Literal u a
 
 -- create conjunction normal form of expression
-knf :: Expression -> Expression
-knf e
-  | isknf e   = e
-  | otherwise = knf . rearrange $ e
+cnf :: Expression -> Expression
+cnf e
+  | iscnf e   = e
+  | otherwise = cnf . rearrange $ e
   where
     rearrange (Literal u a) = Literal u a
     rearrange (Composed u a Or (Composed u' a' And b')) = Composed u (Composed Nothing (rearrange a) Or (rearrange a')) And (Composed Nothing (rearrange a) Or (rearrange b'))
@@ -64,15 +64,15 @@ dnf e
     rearrange (Composed u (Composed u' a' Or b') And b) = Composed u (Composed Nothing (rearrange b) And (rearrange a')) Or (Composed Nothing (rearrange b) And (rearrange b'))
     rearrange (Composed u a o b)                        = Composed u (rearrange a) o (rearrange b)
 
--- extract clauses of knf
-knfClauses :: Expression -> [KClause]
-knfClauses (Composed Nothing a o b)
-  | o == And = knfClauses a ++ knfClauses b
+-- extract clauses of cnf
+cnfClauses :: Expression -> [KClause]
+cnfClauses (Composed Nothing a o b)
+  | o == And = cnfClauses a ++ cnfClauses b
   | o == Or  = [clause a ++ clause b]
   where
     clause (Composed u a Or b) = clause a ++ clause b
     clause (Literal u a)       = [(Literal u a)]
-knfClauses (Literal u a) = [[(Literal u a)]]
+cnfClauses (Literal u a) = [[(Literal u a)]]
 
 -- extract clauses of dnf
 dnfClauses :: Expression -> [DClause]
@@ -85,10 +85,10 @@ dnfClauses (Composed Nothing a o b)
 dnfClauses (Literal u a) = [[(Literal u a)]]
 
 -- minify each clause
-minifyKnfClauses :: [KClause] -> [KClause]
-minifyKnfClauses = rmdups [] . minify
+minifyCnfClauses :: [KClause] -> [KClause]
+minifyCnfClauses = rmdups [] . minify
   where
-    minify (c:cs) = let mc = minifyKnfClause c in
+    minify (c:cs) = let mc = minifyCnfClause c in
       if mc == [(Literal Nothing (Left False))]
       then minify cs else mc:minify cs
     minify [] = []
@@ -98,8 +98,8 @@ minifyKnfClauses = rmdups [] . minify
       | otherwise        = rmdups (a:seen) s
 
 -- remove duplicates and check if universally valid
-minifyKnfClause :: KClause -> KClause
-minifyKnfClause = internal []
+minifyCnfClause :: KClause -> KClause
+minifyCnfClause = internal []
   where
     internal seen [] = seen
     internal seen ((Literal u a):s)
@@ -141,13 +141,13 @@ isCclause (Composed Nothing a And b) = (isCclause a) && (isCclause b)
 isCclause (Literal _ _)              = True
 isCclause _                          = False
 
-isknf :: Expression -> Bool
-isknf (Composed Nothing a Or b)                            = (isDclause a) && (isDclause b)
-isknf (Composed Nothing a And (Composed Nothing a' Or b')) = (isknf a) && (isDclause a') && (isDclause b')
-isknf (Composed Nothing (Composed Nothing a' Or b') And b) = (isknf b) && (isDclause a') && (isDclause b')
-isknf (Composed Nothing a And b)                           = (isknf a) && (isknf b)
-isknf (Literal _ _)                                        = True
-isknf _                                                    = False
+iscnf :: Expression -> Bool
+iscnf (Composed Nothing a Or b)                            = (isDclause a) && (isDclause b)
+iscnf (Composed Nothing a And (Composed Nothing a' Or b')) = (iscnf a) && (isDclause a') && (isDclause b')
+iscnf (Composed Nothing (Composed Nothing a' Or b') And b) = (iscnf b) && (isDclause a') && (isDclause b')
+iscnf (Composed Nothing a And b)                           = (iscnf a) && (iscnf b)
+iscnf (Literal _ _)                                        = True
+iscnf _                                                    = False
 
 isdnf :: Expression -> Bool
 isdnf (Composed Nothing a And b)                           = (isCclause a) && (isCclause b)

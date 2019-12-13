@@ -29,11 +29,11 @@ allFlags o = Parser $ \s -> internal s
 
 modes :: Options -> Parser Options
 modes o = do
-  m <- reserved "orand" <|> reserved "nnf" <|> reserved "knf" <|> reserved "dnf" <|> reserved "clauses"
+  m <- reserved "orand" <|> reserved "nnf" <|> reserved "cnf" <|> reserved "dnf" <|> reserved "clauses"
   return $ case m of
     "orand"   -> o { orand = True }
     "nnf"     -> o { nnf = True }
-    "knf"     -> o { knf = True }
+    "cnf"     -> o { cnf = True }
     "dnf"     -> o { dnf = True }
     "clauses" -> o { clauses = True }
 

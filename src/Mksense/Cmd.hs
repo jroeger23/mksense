@@ -8,7 +8,7 @@ data Options = Options
   {
     nnf :: Bool,
     dnf :: Bool,
-    knf :: Bool,
+    cnf :: Bool,
     orand :: Bool,
     clauses :: Bool,
     scheme :: OutputScheme,
@@ -18,7 +18,7 @@ data Options = Options
 instance Show Options where
   show o = (if nnf o then "nnf"
     else if dnf o    then "dnf"
-    else if knf o    then "knf"
+    else if cnf o    then "cnf"
     else if orand o  then "orand"
     else "show")
     ++ if clauses o then " clauses" else ""
@@ -37,10 +37,10 @@ handle o = do
                       then if clauses o
                               then print . F.minifyDnfClauses . F.dnfClauses . F.dnf . F.nnf . F.orand
                               else print . F.dnf . F.nnf . F.orand
-              else if knf o
+              else if cnf o
                       then if clauses o
-                              then print . F.minifyKnfClauses . F.knfClauses . F.knf . F.nnf . F.orand
-                              else print . F.knf . F.nnf . F.orand
+                              then print . F.minifyCnfClauses . F.cnfClauses . F.cnf . F.nnf . F.orand
+                              else print . F.cnf . F.nnf . F.orand
               else print
 
 human :: Options -> Expression -> IO ()
@@ -54,8 +54,8 @@ human o e
           else
           foldl (>>) (putStrLn "Is satisfied when either:")
             $ map (\cs -> putStrLn $ " - Each of: "++show cs++" evaluates to True") clauses
-      else if knf o then
-        let clauses = F.minifyKnfClauses . F.knfClauses . F.knf . F.nnf . F.orand $ e in
+      else if cnf o then
+        let clauses = F.minifyCnfClauses . F.cnfClauses . F.cnf . F.nnf . F.orand $ e in
           foldl (>>) (putStrLn "Is satisfied when all of:")
             $ map (\cs -> putStrLn $ " - One of: "++show cs++" evaluates to True") clauses
       else error "Cannot show clauses in show mode"
@@ -64,11 +64,11 @@ human o e
       print e
       putStr "Has disjunctive normal form: "
       print . F.dnf . F.nnf . F.orand $ e
-  | knf o = do
+  | cnf o = do
       putStr "Expression:                  "
       print e
       putStr "Has conjunctive normal form: "
-      print . F.knf . F.nnf . F.orand $ e
+      print . F.cnf . F.nnf . F.orand $ e
   | orand o = do
       putStr "Expression:                    "
       print e
