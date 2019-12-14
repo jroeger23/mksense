@@ -40,7 +40,7 @@ If no expression is given, start in interactive mode with specified settings.
 ``` ebnf
 <literal> ::= "\"" <string> "\"" | <alphanum>
 <unary> ::= "not" | "!" | "-" | ""
-<operator> ::= "or" | "||" | "and" | "&&" | "&" | "=>" | "->" | "implies" | "impl" | "<=>" | "=" | "<->" | "equiv" | "eq" | "equivalent" | "nand" | "!&" | "xor"
+<operator> ::= "or" | "||" | "and" | "&&" | "&" | "=>" | "->" | "implies" | "impl" | "<=>" | "==" | "=" | "<->" | "equiv" | "eq" | "equivalent" | "nand" | "!&" | "xor"
 <po> ::= "(" | "[" | "{" | "<"
 <pc> ::= ")" | "]" | "}" | ">"
 <atom> ::= <unary> <po> <expr> <pc> | <literal>
