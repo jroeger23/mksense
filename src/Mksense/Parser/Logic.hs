@@ -32,7 +32,7 @@ literal = do
   return $ Literal u (Right l)
 
 expr :: Parser Expression
-expr = oneOf [equivOp, impliesOp, orOp, andOp, xorOp, nandOp, atom]
+expr = oneOf [impliesOp, equivOp, orOp, andOp, xorOp, nandOp, atom]
 
 atom :: Parser Expression
 atom = parens expr <|> literal
@@ -64,7 +64,7 @@ impliesOp :: Parser Expression
 impliesOp = infixOp ["=>", "->", "implies", "impl"] Implies
 
 equivOp :: Parser Expression
-equivOp = infixOp ["<=>", "=", "<->", "equiv", "eq", "equivalent"] Equivalent
+equivOp = infixOp ["<=>", "==", "=", "<->", "equivalent", "equiv", "eq"] Equivalent
 
 nandOp :: Parser Expression
 nandOp = infixOp ["nand", "!&"] Nand
